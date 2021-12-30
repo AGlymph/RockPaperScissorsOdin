@@ -1,3 +1,4 @@
 # RockPaperScissorsOdin
 
-Console rock paper scissors game project
+Single web page rock paper scissors game project
+
