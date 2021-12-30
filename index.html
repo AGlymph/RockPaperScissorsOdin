@@ -4,9 +4,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="gameLogic.js" defer></script>
     <title>Rock Paper Scissors</title>
 </head>
 <body>
-    <script src="gameLogic.js"></script>
+    <h2 class="main-title"> Let's play: ROCK, PAPER, SCISSORS! </h2>
+    <div class = "content">
+        <div class="game-info">
+            <div class="max-score">Points to win: 5</div>
+            <div class="current-score">Player: 0  Computer: 0</div>
+        </div>
+        <div class="round-info">
+            <h1 class= "game-result"></h1>
+            <h5>Round Result</h5>
+            <div class="round-result">Let's begin!</div>
+        </div>
+        <div class="player-selections">
+            <h5>Choose one</h3>
+                <ul>
+                    <li><button id="ROCK" class="selection" type="button">ROCK</button></li>
+                    <li><button id="PAPER" class="selection" type="button">PAPER</button></li>
+                    <li><button id="SCISSORS" class="selection" type="button">SCISSORS</button></li>
+                </ul>
+        </div>
+        <div class="game-options">
+            <h6>Game Options</h6>
+            <button type="button" id="change-points">Change Max Score</button>
+            <button type="button" id="reset-button">New Game</button>
+        </div>
+       
+
+    </div>
 </body>
 </html>
+
+<!--three buttons for each selection with events
+div for results
+running score, Annouce at five
+-->

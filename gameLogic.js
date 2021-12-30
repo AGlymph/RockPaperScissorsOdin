@@ -1,9 +1,34 @@
 let computerWinCount = 0;
 let playerWinCount = 0;
+let pointsToWin = 5;
+
 /*round result comparsion variables*/
 const win = 'Win';
 const lose = 'Lose';
 const tie ='tie';
+const error = 'error';
+
+
+//get html sections for information display
+const selections = document.querySelectorAll('.selection');
+const roundResultSection = document.querySelector('.round-result');
+const maxScoreCounter = document.querySelector('.max-score');
+const scoreBoard = document.querySelector('.current-score');
+const gameResult = document.querySelector('.game-result');
+const changeScoreButton = document.querySelector('#change-points');
+const resetButton = document.querySelector('#reset-button');
+
+//attach events to buttons
+selections.forEach(button => button.addEventListener('click', ()=> playRound(button.id, computerPlay())));
+resetButton.addEventListener('click', () =>reset());
+
+//on "change score button" click ask user for new score, validate, and then show
+changeScoreButton.addEventListener('click', () =>{
+    pointsToWin = prompt("Enter new max score: ")
+    if(!(pointsToWin > 0))
+        pointsToWin = 5;
+    maxScoreCounter.textContent = `Points to win: ${pointsToWin}`;
+});
 
 //get the computer's guess
 function computerPlay(){
@@ -20,69 +45,73 @@ function computerPlay(){
 function playRound(playerSelection, computerSelection){
     playerSelection = playerSelection.toUpperCase();
     computerSelection = computerSelection.toUpperCase();
+    let result = tie;
 
     switch(playerSelection){
         case "ROCK":
             if(computerSelection == "ROCK")
             {
-                return tie;
+                result = tie;
             }   
             else if(computerSelection == "PAPER")
             {
-                return lose;
+                result = lose;
             }
             else //computerSelection must be SCISSORS;
             {
-                return  win;
+                result =  win;
             }  
             break;
         case "PAPER":
             if(computerSelection == "ROCK")
             {
-                return win;
+                result = win;
             }
             else if(computerSelection == "PAPER")
             {
-                return tie;
+                result = tie;
             }
             else //computerSelection must be SCISSORS;
             {
-                return  lose;
+                result =  lose;
             }
             break;
         case "SCISSORS":
             if(computerSelection == "ROCK")
             {
-                return lose;
+                result = lose;
             } 
             else if(computerSelection == "PAPER")
             {
-                return win;
+                result = win;
             }
             else //computerSelection must be SCISSORS;
             {
-                return  tie;
+                result =  tie;
             }
             break;
         default:
-            return `${playerSelection} is not an option`;
+            result = error;
     
     }
+
+    displayRoundResult(playerSelection,computerSelection,result);
+    trackGameScore(result);
 }
 //print the result from the round
-function roundResultString(playerSelection,computerSelection, result)
+function displayRoundResult(playerSelection,computerSelection, result)
 {
     if(result == win)
     {
-        return `You Win! ${playerSelection} beats ${computerSelection}`;
+        roundResultSection.textContent =`You Win! ${playerSelection} beats ${computerSelection}` ;
     }
     else if(result == lose)
     {
-        return `You Lose! ${playerSelection} does not beat ${computerSelection}`;
+        roundResultSection.textContent =`You Lose! ${playerSelection} does not beat ${computerSelection}` ;
     }
     else
     {
-        return`TIE! Both selected ${playerSelection}`;
+        roundResultSection.textContent =`TIE! Both selected ${playerSelection}`;
     }
 }
 //increment total score 
@@ -92,36 +121,41 @@ function trackGameScore(resultWon)
         playerWinCount++;
     else if((resultWon == lose))
         computerWinCount++;
+
+    updateScoreBoard(playerWinCount,computerWinCount);
+
+    if(playerWinCount >= pointsToWin || computerWinCount >= pointsToWin)
+    {
+        printFinalResult();
+    }
 }
 //show final result
 function printFinalResult()
 {
-    console.log("FINISHED!")
+    roundResultSection.textContent="";
     if(playerWinCount > computerWinCount)
     {
-        console.log(`You Win! You: ${playerWinCount}   Computer: ${computerWinCount}`);
+       gameResult.textContent = "You Win!";
     }
     else if(computerWinCount > playerWinCount)
     {
-        console.log(`You Lose. You: ${playerWinCount}   Computer: ${computerWinCount}`);
+       gameResult.textContent = "You Lose.";
     }
     else
     {
-        console.log(`Tie. You: ${playerWinCount}   Computer: ${computerWinCount}`);
+       gameResult.textContent = "Tie.";
     }
 }
-//play game
-function game(){
 
-    for (let r = 1; r<=5; r++){
-        let playerSelection = prompt("Rock, Paper, or Scissors?");
-        let computerSelection = computerPlay();
-        let roundResult = playRound(playerSelection, computerSelection);
-        console.log(roundResultString(playerSelection, computerSelection, roundResult));
-        trackGameScore(roundResult);
-    }
-    
-    printFinalResult();
+function updateScoreBoard(playerScore = 0, computerScore = 0)
+{   
+    scoreBoard.textContent = `Player: ${playerWinCount} Computer: ${computerWinCount}`;
 }
-//start game
-game();
+
+function reset(){
+    playerWinCount = 0;
+    computerWinCount = 0;
+    updateScoreBoard();
+    roundResultSection.textContent="";
+    gameResult.textContent ="";
+}
